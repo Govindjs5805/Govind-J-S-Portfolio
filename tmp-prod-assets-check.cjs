@@ -1,7 +1,7 @@
 const https = require('https');
 const urls = [
   'https://govind-portfolio-delta.vercel.app/assets/index-DV0r1Gnd.js',
-  'https://govind-portfolio-delta.vercel.app/assets/index-7dw0QTm6.css'
+  'https://govind-j-s.vercel.app/assets/index-7dw0QTm6.css'
 ];
 let completed = 0;
 urls.forEach(url => {
