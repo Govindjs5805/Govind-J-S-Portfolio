@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, GitBranch, Link, Send } from 'lucide-react';
 import { useState } from 'react';
+import emailjs from 'emailjs-com';
 import SectionTitle from './SectionTitle';
 
 export default function Contact() {
@@ -12,21 +13,22 @@ export default function Contact() {
     e.preventDefault();
     setLoading(true);
     setStatus(null);
+    const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID';
+    const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID';
+    const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY';
+
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-      if (res.ok) {
-        setStatus({ ok: true, message: 'Message sent — thank you!' });
-        setForm({ name: '', email: '', message: '' });
-      } else {
-        const json = await res.json().catch(() => ({}));
-        setStatus({ ok: false, message: json.error || 'Send failed' });
-      }
+      const templateParams = {
+        from_name: form.name,
+        from_email: form.email,
+        message: form.message,
+      };
+      await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+      setStatus({ ok: true, message: 'Message sent — thank you!' });
+      setForm({ name: '', email: '', message: '' });
     } catch (err) {
-      setStatus({ ok: false, message: 'Network error' });
+      console.error('EmailJS error', err);
+      setStatus({ ok: false, message: 'Send failed' });
     } finally {
       setLoading(false);
     }
