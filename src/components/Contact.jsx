@@ -5,12 +5,31 @@ import SectionTitle from './SectionTitle';
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Portfolio contact from ${form.name}`);
-    const body = encodeURIComponent(`${form.message}\n\nFrom: ${form.name} (${form.email})`);
-    window.location.href = `mailto:govindjspersonal@gmail.com?subject=${subject}&body=${body}`;
+    setLoading(true);
+    setStatus(null);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (res.ok) {
+        setStatus({ ok: true, message: 'Message sent — thank you!' });
+        setForm({ name: '', email: '', message: '' });
+      } else {
+        const json = await res.json().catch(() => ({}));
+        setStatus({ ok: false, message: json.error || 'Send failed' });
+      }
+    } catch (err) {
+      setStatus({ ok: false, message: 'Network error' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -97,12 +116,18 @@ export default function Contact() {
               placeholder="Your Message"
               className="w-full px-4 py-3 rounded-xl bg-black/5 dark:bg-white/5 border border-transparent focus:border-mint-500 outline-none transition-colors text-sm resize-none"
             />
-            <button
-              type="submit"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-mint-500 text-ink-950 font-semibold hover:bg-mint-400 transition-colors"
-            >
-              Send Message <Send size={16} />
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                type="submit"
+                disabled={loading}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-mint-500 text-ink-950 font-semibold hover:bg-mint-400 transition-colors disabled:opacity-60"
+              >
+                {loading ? 'Sending...' : 'Send Message'} <Send size={16} />
+              </button>
+              {status && (
+                <p className={`text-sm ${status.ok ? 'text-green-500' : 'text-red-500'}`}>{status.message}</p>
+              )}
+            </div>
           </motion.form>
         </div>
       </div>
