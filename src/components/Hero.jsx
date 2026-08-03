@@ -108,8 +108,8 @@ export default function Hero() {
           className="flex gap-4"
         >
           {[
-            { icon: GitBranch, href: 'https://github.com/yourusername' },
-            { icon: Link, href: 'https://linkedin.com/in/yourusername' },
+            { icon: GitBranch, href: 'https://github.com/Govindjs5805' },
+            { icon: Link, href: 'https://www.linkedin.com/in/govindjs5805' },
             { icon: Mail, href: 'mailto:govindjspersonal@gmail.com' },
           ].map(({ icon: Icon, href }, i) => (
             <a
