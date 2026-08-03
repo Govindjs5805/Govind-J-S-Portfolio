@@ -22,7 +22,7 @@ export default function About() {
           <div className="relative w-72 h-72 mx-auto md:mx-0">
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-mint-500/30 to-emerald-400/10 blur-2xl" />
             <div className="relative w-full h-full rounded-3xl glass overflow-hidden border-2 border-mint-500/30">
-              <img src="/images.jpg" alt="Avatar" className="w-full h-full object-cover" />
+              <img src="/image.jpg" alt="Avatar" className="w-full h-full object-cover" />
             </div>
             <div className="absolute -bottom-6 -right-6 glass rounded-2xl px-4 py-3 font-mono text-xs shadow-xl">
               <p className="text-mint-500">const dev = {'{'}</p>
