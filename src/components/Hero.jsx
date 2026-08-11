@@ -102,12 +102,12 @@ function Portrait() {
           absolute
           bottom-0
 
-          h-[92vh]
-          max-h-[980px]
+          h-[105vh]
+          max-h-[1100px]
 
-          sm:h-[95vh]
-          xl:h-[98vh]
-          2xl:h-[100vh]
+          sm:h-[108vh]
+          xl:h-[112vh]
+          2xl:h-[115vh]
 
           w-auto
           max-w-none
