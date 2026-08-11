@@ -31,3 +31,26 @@ body {
 .glass {
   @apply bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-black/5 dark:border-white/10;
 }
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee-scroll 25s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee-scroll 25s linear infinite;
+  will-change: transform;
+}

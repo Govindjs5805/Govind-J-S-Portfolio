@@ -9,6 +9,7 @@ import Education from './components/Education';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import { Spotlight, ScrollProgress } from './components/Effects';
+import ScrollingText from './components/ScrollingText';
 
 export default function App() {
   const [dark, setDark] = useState(true);
@@ -31,6 +32,7 @@ export default function App() {
       <Navbar dark={dark} setDark={setDark} />
       <main>
         <Hero />
+        <ScrollingText />
         <About />
         <Skills />
         <Projects />
