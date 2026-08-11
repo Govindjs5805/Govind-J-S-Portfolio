@@ -343,7 +343,7 @@ function InteractiveManifesto() {
           transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
           className="hidden sm:block"
         >
-          {hasFinePointer ? 'HOVER TO EXPLORE →' : 'TAP TO EXPLORE →'}
+  
         </motion.span>
       </div>
     </motion.div>
