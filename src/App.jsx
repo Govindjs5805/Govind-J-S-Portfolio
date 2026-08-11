@@ -35,9 +35,11 @@ export default function App() {
         <ScrollingText />
         <About />
         <Skills />
+        <ScrollingText />
         <Projects />
         <Experience />
         <Education />
+        <ScrollingText />
         <Contact />
       </main>
       <Footer />
