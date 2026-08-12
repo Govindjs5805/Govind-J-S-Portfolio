@@ -1,10 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import {
   motion,
   AnimatePresence,
-  useMotionValue,
-  useSpring,
-  useTransform,
 } from 'framer-motion';
 
 import {
@@ -14,19 +11,20 @@ import {
   MapPin,
   CheckCircle2,
   ScanLine,
-  RotateCcw,
   Sparkles,
+  BookOpen,
+  Globe,
+  MessageCircle,
 } from 'lucide-react';
-
 
 /* =========================================================
    DATA
 ========================================================= */
 
 const languages = [
-  { name: 'Malayalam', level: 100, label: 'Native' },
-  { name: 'English', level: 90, label: 'Fluent' },
-  { name: 'Hindi', level: 40, label: 'Basic' },
+  { name: 'Malayalam', level: 100, label: 'Native', desc: 'Mother tongue' },
+  { name: 'English',   level: 90,  label: 'Fluent',  desc: 'Professional use' },
+  { name: 'Hindi',     level: 40,  label: 'Basic',   desc: 'Conversational' },
 ];
 
 const certifications = [
@@ -35,23 +33,23 @@ const certifications = [
     issuer: 'Postman',
     tag: 'API Development',
     code: 'PMN-2024-SE-88214',
+    year: '2024',
   },
   {
     title: 'Data Structures & Algorithms using Python',
     issuer: 'NPTEL',
     tag: 'Core CS',
     code: 'NPT-DSA-PY-55931',
+    year: '2024',
   },
 ];
 
-
 /* =========================================================
-   FLIP EDUCATION CARD
+   EDUCATION HERO CARD
 ========================================================= */
 
 function EducationCard() {
   const [flipped, setFlipped] = useState(false);
-
   const cgpa = 9.6;
   const percentage = (cgpa / 10) * 100;
   const radius = 46;
@@ -71,28 +69,18 @@ function EducationCard() {
         animate={{ rotateY: flipped ? 180 : 0 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         style={{ transformStyle: 'preserve-3d' }}
-        className="relative w-full h-[280px] cursor-pointer group"
+        className="relative w-full h-[280px] cursor-pointer"
       >
-        {/* ── FRONT FACE ── */}
+        {/* ── FRONT ── */}
         <div
           style={{ backfaceVisibility: 'hidden' }}
-          className="
-            absolute inset-0
-            rounded-[2rem]
-            overflow-hidden
-            border border-mint-500/20
-            bg-gradient-to-br from-mint-600 via-emerald-600 to-green-700
-            p-8 sm:p-10
-            flex flex-col justify-between
-            shadow-2xl shadow-mint-900/20
-          "
+          className="absolute inset-0 rounded-3xl overflow-hidden border border-mint-500/20 bg-gradient-to-br from-mint-600 via-emerald-600 to-green-700 p-8 sm:p-10 flex flex-col justify-between shadow-2xl shadow-mint-900/20"
         >
-          {/* decorative pattern */}
+          {/* dot pattern */}
           <div
-            className="absolute inset-0 opacity-[0.08]"
+            className="absolute inset-0 opacity-[0.07]"
             style={{
-              backgroundImage:
-                'radial-gradient(circle, white 1px, transparent 1px)',
+              backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
               backgroundSize: '18px 18px',
             }}
           />
@@ -102,53 +90,44 @@ function EducationCard() {
             <div className="w-11 h-11 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center">
               <GraduationCap size={20} className="text-white" />
             </div>
-
-            <motion.div
-              animate={{ rotate: [0, 15, -15, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 2 }}
-              className="flex items-center gap-1.5 text-[10px] font-mono text-white/70 uppercase tracking-widest"
-            >
-              
-            </motion.div>
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur">
+              <motion.span
+                className="w-1.5 h-1.5 rounded-full bg-white"
+                animate={{ opacity: [1, 0.3, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              />
+              <span className="text-[10px] font-mono text-white/80">2023 — Present</span>
+            </div>
           </div>
 
           <div className="relative">
             <p className="font-mono text-[10px] text-white/60 uppercase tracking-widest mb-2">
-              Student Identity
+              B.Tech · Computer Science
             </p>
             <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
               College of Engineering<br />Chengannur
             </h3>
-            <p className="text-white/80 text-sm mt-2">
-              Bachelor of Technology · Computer Science
-            </p>
+            <div className="flex items-center gap-4 mt-3">
+              <div className="flex items-center gap-1.5 text-white/70 text-xs">
+                <MapPin size={11} />
+                Alappuzha, Kerala
+              </div>
+              
+            </div>
           </div>
         </div>
 
-        {/* ── BACK FACE ── */}
+        {/* ── BACK ── */}
         <div
-          style={{
-            backfaceVisibility: 'hidden',
-            transform: 'rotateY(180deg)',
-          }}
-          className="
-            absolute inset-0
-            rounded-[2rem]
-            overflow-hidden
-            border border-black/5 dark:border-white/10
-            bg-white/70 dark:bg-white/[0.04]
-            backdrop-blur-xl
-            p-8 sm:p-10
-            flex items-center gap-8
-          "
+          style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+          className="absolute inset-0 rounded-3xl overflow-hidden border border-black/5 dark:border-white/10 bg-white/70 dark:bg-white/[0.04] backdrop-blur-xl p-8 sm:p-10 flex items-center gap-8"
         >
           <div
-            className="
-              absolute inset-0 opacity-[0.03]
-              bg-[linear-gradient(rgba(34,197,94,1)_1px,transparent_1px),linear-gradient(90deg,rgba(34,197,94,1)_1px,transparent_1px)]
-              bg-[size:28px_28px]
-              pointer-events-none
-            "
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: 'linear-gradient(rgba(34,197,94,1) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,1) 1px, transparent 1px)',
+              backgroundSize: '28px 28px',
+            }}
           />
 
           {/* CGPA ring */}
@@ -156,17 +135,14 @@ function EducationCard() {
             <svg className="w-full h-full -rotate-90" viewBox="0 0 116 116">
               <circle
                 cx="58" cy="58" r={radius}
-                fill="none"
-                stroke="currentColor"
+                fill="none" stroke="currentColor"
                 className="text-black/5 dark:text-white/10"
                 strokeWidth="7"
               />
               <motion.circle
                 cx="58" cy="58" r={radius}
-                fill="none"
-                stroke="url(#eduGrad)"
-                strokeWidth="7"
-                strokeLinecap="round"
+                fill="none" stroke="url(#eduGrad)"
+                strokeWidth="7" strokeLinecap="round"
                 strokeDasharray={circumference}
                 initial={{ strokeDashoffset: circumference }}
                 animate={{
@@ -174,7 +150,7 @@ function EducationCard() {
                     ? circumference * (1 - percentage / 100)
                     : circumference,
                 }}
-                transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: flipped ? 0.3 : 0 }}
+                transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
               />
               <defs>
                 <linearGradient id="eduGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -189,24 +165,20 @@ function EducationCard() {
             </div>
           </div>
 
-          <div className="relative flex-1 min-w-0">
-            <p className="font-mono text-[10px] tracking-widest text-mint-500 uppercase mb-2">
-              Transcript
+          <div className="relative flex-1 min-w-0 space-y-3">
+            <p className="font-mono text-[10px] tracking-widest text-mint-500 uppercase">
+              Academic Transcript
             </p>
-            <div className="space-y-2.5">
-              <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                <Calendar size={12} className="text-mint-500" />
-                Sep 2023 — Present
+            {[
+              { icon: Calendar, text: 'Sep 2023 — Present' },
+              { icon: MapPin,   text: 'Alappuzha, Kerala' },
+              { icon: BookOpen, text: 'CGPA 9.6 / 10.0' },
+            ].map(({ icon: Icon, text }) => (
+              <div key={text} className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                <Icon size={12} className="text-mint-500 flex-shrink-0" />
+                {text}
               </div>
-              <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                <MapPin size={12} className="text-mint-500" />
-                Alappuzha, Kerala
-              </div>
-              <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                <Award size={12} className="text-mint-500" />
-                Top academic performance
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </motion.div>
@@ -214,16 +186,14 @@ function EducationCard() {
   );
 }
 
-
 /* =========================================================
-   LANGUAGE DIAL
+   LANGUAGE CARD — redesigned as horizontal bars
 ========================================================= */
 
-function LanguageDial() {
-  const [active, setActive] = useState(0);
-  const radius = 46;
-  const circumference = 2 * Math.PI * radius;
-  const current = languages[active];
+function LanguageCard() {
+  const [active, setActive] = useState(null);
+
+  const langIcons = [Globe, MessageCircle, BookOpen];
 
   return (
     <motion.div
@@ -231,93 +201,80 @@ function LanguageDial() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-      className="
-        relative rounded-[2rem] border border-black/5 dark:border-white/10
-        bg-white/60 dark:bg-white/[0.03] backdrop-blur-xl p-8
-        flex flex-col items-center overflow-hidden
-      "
+      className="relative rounded-3xl border border-black/5 dark:border-white/10 bg-white/60 dark:bg-white/[0.03] backdrop-blur-xl p-7 flex flex-col overflow-hidden"
     >
-      <div className="absolute -top-10 -left-10 w-32 h-32 bg-mint-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-8 -right-8 w-28 h-28 bg-mint-500/10 rounded-full blur-2xl pointer-events-none" />
 
-      <p className="relative self-start font-mono text-[10px] tracking-widest text-mint-500 uppercase mb-6">
+      <p className="font-mono text-[10px] tracking-widest text-mint-500 uppercase mb-6">
         Languages
       </p>
 
-      {/* dial */}
-      <div className="relative w-28 h-28 mb-6">
-        <svg className="w-full h-full -rotate-90" viewBox="0 0 116 116">
-          <circle
-            cx="58" cy="58" r={radius}
-            fill="none"
-            stroke="currentColor"
-            className="text-black/5 dark:text-white/10"
-            strokeWidth="7"
-          />
-          <motion.circle
-            cx="58" cy="58" r={radius}
-            fill="none"
-            stroke="url(#langGrad)"
-            strokeWidth="7"
-            strokeLinecap="round"
-            strokeDasharray={circumference}
-            animate={{
-              strokeDashoffset: circumference * (1 - current.level / 100),
-            }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          />
-          <defs>
-            <linearGradient id="langGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#16a34a" />
-              <stop offset="100%" stopColor="#4ade80" />
-            </linearGradient>
-          </defs>
-        </svg>
-
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={current.level}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.25 }}
-              className="text-xl font-black text-gradient"
-            >
-              {current.level}%
-            </motion.span>
-          </AnimatePresence>
-        </div>
-      </div>
-
-      {/* selector pills */}
-      <div className="flex flex-col gap-2 w-full">
+      <div className="flex flex-col gap-4 flex-1 justify-center">
         {languages.map((lang, i) => {
+          const Icon = langIcons[i];
           const isActive = active === i;
+
           return (
-            <motion.button
+            <motion.div
               key={lang.name}
-              onClick={() => setActive(i)}
-              whileTap={{ scale: 0.97 }}
-              className={`
-                relative flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium
-                border transition-colors duration-300 overflow-hidden
-                ${
-                  isActive
-                    ? 'border-mint-500/50 text-mint-600 dark:text-mint-400'
-                    : 'border-black/5 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:border-mint-500/25'
-                }
-              `}
+              onMouseEnter={() => setActive(i)}
+              onMouseLeave={() => setActive(null)}
+              className="cursor-default"
             >
-              {isActive && (
+              <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center gap-2">
+                  <Icon
+                    size={13}
+                    className={`transition-colors ${isActive ? 'text-mint-500' : 'text-gray-400'}`}
+                  />
+                  <span className={`text-sm font-semibold transition-colors ${isActive ? 'text-mint-600 dark:text-mint-400' : ''}`}>
+                    {lang.name}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono text-gray-400">{lang.desc}</span>
+                  <motion.span
+                    animate={{ opacity: isActive ? 1 : 0.5 }}
+                    className="text-[10px] font-mono font-bold text-mint-500"
+                  >
+                    {lang.level}%
+                  </motion.span>
+                </div>
+              </div>
+
+              {/* bar */}
+              <div className="h-1.5 bg-black/5 dark:bg-white/5 rounded-full overflow-hidden">
                 <motion.div
-                  layoutId="langActiveBg"
-                  className="absolute inset-0 bg-mint-500/10"
-                  transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-                />
-              )}
-              <span className="relative z-10">{lang.name}</span>
-              <span className="relative z-10 text-[10px] font-mono opacity-70">{lang.label}</span>
-            </motion.button>
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${lang.level}%` }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  className="h-full rounded-full bg-gradient-to-r from-mint-600 to-mint-400 relative overflow-hidden"
+                >
+                  {isActive && (
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                      animate={{ x: ['-100%', '200%'] }}
+                      transition={{ duration: 1, repeat: Infinity }}
+                    />
+                  )}
+                </motion.div>
+              </div>
+
+              {/* proficiency dots */}
+              <div className="flex gap-1 mt-1.5">
+                {[...Array(5)].map((_, d) => (
+                  <div
+                    key={d}
+                    className={`h-0.5 flex-1 rounded-full transition-colors duration-300 ${
+                      d < Math.round((lang.level / 100) * 5)
+                        ? isActive ? 'bg-mint-500' : 'bg-mint-500/50'
+                        : 'bg-black/5 dark:bg-white/10'
+                    }`}
+                  />
+                ))}
+              </div>
+            </motion.div>
           );
         })}
       </div>
@@ -325,29 +282,27 @@ function LanguageDial() {
   );
 }
 
-
 /* =========================================================
    PARTICLE BURST
 ========================================================= */
 
 function ParticleBurst({ trigger }) {
   if (!trigger) return null;
-
-  const particles = Array.from({ length: 14 });
-
   return (
     <div className="absolute inset-0 pointer-events-none overflow-visible">
-      {particles.map((_, i) => {
-        const angle = (i / particles.length) * Math.PI * 2;
-        const distance = 60 + Math.random() * 40;
-        const x = Math.cos(angle) * distance;
-        const y = Math.sin(angle) * distance;
-
+      {Array.from({ length: 14 }).map((_, i) => {
+        const angle = (i / 14) * Math.PI * 2;
+        const dist = 60 + Math.random() * 40;
         return (
           <motion.span
             key={i}
             initial={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-            animate={{ opacity: 0, x, y, scale: 0 }}
+            animate={{
+              opacity: 0,
+              x: Math.cos(angle) * dist,
+              y: Math.sin(angle) * dist,
+              scale: 0,
+            }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
             className="absolute top-1/2 left-1/2 w-1.5 h-1.5 rounded-full bg-mint-500"
           />
@@ -357,19 +312,17 @@ function ParticleBurst({ trigger }) {
   );
 }
 
-
 /* =========================================================
-   CERTIFICATION — CLICK TO VERIFY
+   CERTIFICATION CARD
 ========================================================= */
 
 function CertificationCard({ cert, index }) {
-  const [state, setState] = useState('sealed'); // sealed | scanning | verified
+  const [state, setState] = useState('sealed');
   const [burst, setBurst] = useState(false);
 
   const handleVerify = () => {
     if (state !== 'sealed') return;
     setState('scanning');
-
     setTimeout(() => {
       setState('verified');
       setBurst(true);
@@ -384,12 +337,13 @@ function CertificationCard({ cert, index }) {
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
       onClick={handleVerify}
+      whileHover={{ y: state === 'sealed' ? -4 : 0 }}
       className={`
         relative overflow-hidden rounded-2xl border p-6
         bg-white/60 dark:bg-white/[0.03] backdrop-blur-xl
-        transition-colors duration-500
+        transition-all duration-500
         ${state === 'verified'
-          ? 'border-mint-500/40'
+          ? 'border-mint-500/40 shadow-lg shadow-mint-500/10'
           : 'border-black/5 dark:border-white/10 hover:border-mint-500/25 cursor-pointer'
         }
       `}
@@ -407,18 +361,30 @@ function CertificationCard({ cert, index }) {
         )}
       </AnimatePresence>
 
+      {/* verified glow */}
+      {state === 'verified' && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="absolute inset-0 bg-gradient-to-br from-mint-500/5 to-transparent pointer-events-none"
+        />
+      )}
+
       <div className="relative flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
-          <span className="text-[9px] font-mono px-2 py-1 rounded-full bg-mint-500/10 text-mint-600 dark:text-mint-400 uppercase tracking-widest">
-            {cert.tag}
-          </span>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-[9px] font-mono px-2 py-1 rounded-full bg-mint-500/10 text-mint-600 dark:text-mint-400 uppercase tracking-widest">
+              {cert.tag}
+            </span>
+            <span className="text-[9px] font-mono text-gray-400">{cert.year}</span>
+          </div>
 
-          <h4 className="font-bold text-sm leading-snug mt-3">
+          <h4 className="font-bold text-sm leading-snug mb-2">
             {cert.title}
           </h4>
 
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-            Issued by {cert.issuer}
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            Issued by <span className="text-mint-600 dark:text-mint-400 font-medium">{cert.issuer}</span>
           </p>
         </div>
 
@@ -432,9 +398,9 @@ function CertificationCard({ cert, index }) {
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.6, opacity: 0 }}
-                className="w-9 h-9 rounded-xl bg-black/5 dark:bg-white/10 flex items-center justify-center"
+                className="w-10 h-10 rounded-xl bg-black/5 dark:bg-white/10 flex items-center justify-center"
               >
-                <ScanLine size={15} className="text-gray-400" />
+                <ScanLine size={16} className="text-gray-400" />
               </motion.div>
             )}
 
@@ -445,9 +411,9 @@ function CertificationCard({ cert, index }) {
                 animate={{ scale: 1, opacity: 1, rotate: 360 }}
                 exit={{ scale: 0.6, opacity: 0 }}
                 transition={{ rotate: { duration: 0.9, ease: 'linear' } }}
-                className="w-9 h-9 rounded-xl bg-mint-500/10 flex items-center justify-center"
+                className="w-10 h-10 rounded-xl bg-mint-500/10 flex items-center justify-center"
               >
-                <ScanLine size={15} className="text-mint-500" />
+                <ScanLine size={16} className="text-mint-500" />
               </motion.div>
             )}
 
@@ -457,16 +423,16 @@ function CertificationCard({ cert, index }) {
                 initial={{ scale: 0, rotate: -45 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                className="w-9 h-9 rounded-xl bg-mint-500 flex items-center justify-center shadow-lg shadow-mint-500/30"
+                className="w-10 h-10 rounded-xl bg-mint-500 flex items-center justify-center shadow-lg shadow-mint-500/30"
               >
-                <CheckCircle2 size={17} className="text-white" />
+                <CheckCircle2 size={18} className="text-white" />
               </motion.div>
             )}
           </AnimatePresence>
         </div>
       </div>
 
-      {/* footer state */}
+      {/* footer */}
       <div className="relative flex items-center justify-between mt-5 pt-4 border-t border-black/5 dark:border-white/10">
         <AnimatePresence mode="wait">
           {state === 'sealed' && (
@@ -478,7 +444,7 @@ function CertificationCard({ cert, index }) {
               className="flex items-center gap-1.5 text-[10px] font-mono text-gray-400"
             >
               <Sparkles size={11} />
-              click to verify
+              click to verify credential
             </motion.span>
           )}
           {state === 'scanning' && (
@@ -487,8 +453,13 @@ function CertificationCard({ cert, index }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="text-[10px] font-mono text-mint-500"
+              className="flex items-center gap-1.5 text-[10px] font-mono text-mint-500"
             >
+              <motion.span
+                className="w-1.5 h-1.5 rounded-full bg-mint-500"
+                animate={{ opacity: [1, 0.3, 1] }}
+                transition={{ duration: 0.5, repeat: Infinity }}
+              />
               verifying credential...
             </motion.span>
           )}
@@ -509,7 +480,6 @@ function CertificationCard({ cert, index }) {
   );
 }
 
-
 /* =========================================================
    MAIN COMPONENT
 ========================================================= */
@@ -517,25 +487,38 @@ function CertificationCard({ cert, index }) {
 export default function Education() {
   return (
     <section id="education" className="relative py-28 px-6 overflow-hidden">
+      {/* bg glows */}
       <div className="absolute top-20 right-1/4 w-96 h-96 bg-mint-500/[0.05] rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 left-1/4 w-72 h-72 bg-emerald-400/[0.04] rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-6xl mx-auto">
 
+        {/* SECTION LABEL */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="flex items-center gap-3 mb-14"
         >
-          <span className="w-8 h-[2px] bg-mint-500" />
-          <p className="font-mono text-mint-500 text-sm tracking-widest">EDUCATION & CREDENTIALS</p>
+          <motion.span
+            initial={{ width: 0 }}
+            whileInView={{ width: 32 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="h-[2px] bg-mint-500"
+          />
+          <p className="font-mono text-mint-500 text-sm tracking-widest">
+            EDUCATION & CREDENTIALS
+          </p>
         </motion.div>
 
+        {/* TOP ROW — education card + language card */}
         <div className="grid md:grid-cols-3 gap-5 mb-5">
           <EducationCard />
-          <LanguageDial />
+          <LanguageCard />
         </div>
 
+        {/* CERTIFICATIONS */}
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}

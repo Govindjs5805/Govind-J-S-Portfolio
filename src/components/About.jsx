@@ -14,9 +14,6 @@ import {
   Users,
   MapPin,
   GraduationCap,
-  Sparkles,
-  Terminal,
-  Heart,
 } from 'lucide-react';
 
 /* =========================================================
@@ -38,6 +35,47 @@ function useHasFinePointer() {
 }
 
 /* =========================================================
+   LOOPING TYPEWRITER
+========================================================= */
+
+const bioLines = [
+  'CS undergrad @ CEC · passionate about shipping real-world software, training ML models, and leading creative teams.',
+  'Full-stack developer who loves turning ideas into polished products people actually enjoy using.',
+  'Designer + Developer hybrid · CGPA 9.6 · always building, always learning.',
+  'Creative Lead @ IEDC & MuLearn · bridging design and engineering one project at a time.',
+];
+
+function useLoopingTypewriter(lines, speed = 28, pause = 1800) {
+  const [text, setText] = useState('');
+  const [lineIndex, setLineIndex] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const current = lines[lineIndex % lines.length];
+    let timeout;
+
+    if (!deleting) {
+      if (text.length < current.length) {
+        timeout = setTimeout(() => setText(current.slice(0, text.length + 1)), speed);
+      } else {
+        timeout = setTimeout(() => setDeleting(true), pause);
+      }
+    } else {
+      if (text.length > 0) {
+        timeout = setTimeout(() => setText(current.slice(0, text.length - 1)), speed / 2);
+      } else {
+        setDeleting(false);
+        setLineIndex((i) => (i + 1) % lines.length);
+      }
+    }
+
+    return () => clearTimeout(timeout);
+  }, [text, deleting, lineIndex, lines, speed, pause]);
+
+  return text;
+}
+
+/* =========================================================
    ANIMATED COUNTER
 ========================================================= */
 
@@ -52,9 +90,7 @@ function Counter({ to, suffix = '' }) {
     const tick = (now) => {
       const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      setVal(
-        parseFloat((eased * to).toFixed(Number.isInteger(to) ? 0 : 1))
-      );
+      setVal(parseFloat((eased * to).toFixed(Number.isInteger(to) ? 0 : 1)));
       if (progress < 1) frame = requestAnimationFrame(tick);
     };
 
@@ -76,15 +112,8 @@ function PhotoCard() {
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
 
-  const rotateX = useSpring(
-    useTransform(mouseY, [0, 1], [9, -9]),
-    { stiffness: 160, damping: 22 }
-  );
-  const rotateY = useSpring(
-    useTransform(mouseX, [0, 1], [-9, 9]),
-    { stiffness: 160, damping: 22 }
-  );
-
+  const rotateX = useSpring(useTransform(mouseY, [0, 1], [9, -9]), { stiffness: 160, damping: 22 });
+  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-9, 9]), { stiffness: 160, damping: 22 });
   const glowX = useTransform(mouseX, [0, 1], ['0%', '100%']);
   const glowY = useTransform(mouseY, [0, 1], ['0%', '100%']);
 
@@ -96,26 +125,14 @@ function PhotoCard() {
     mouseY.set((e.clientY - rect.top) / rect.height);
   };
 
-  const reset = () => {
-    mouseX.set(0.5);
-    mouseY.set(0.5);
-  };
+  const reset = () => { mouseX.set(0.5); mouseY.set(0.5); };
 
   return (
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={reset}
-      style={
-        hasFinePointer
-          ? {
-              rotateX,
-              rotateY,
-              transformStyle: 'preserve-3d',
-              perspective: 900,
-            }
-          : {}
-      }
+      style={hasFinePointer ? { rotateX, rotateY, transformStyle: 'preserve-3d', perspective: 900 } : {}}
       className="relative w-72 h-80 mx-auto lg:mx-0"
     >
       <div className="absolute inset-0 scale-105 rounded-[2rem] bg-gradient-to-br from-mint-500/30 to-emerald-400/5 blur-xl sm:blur-2xl pointer-events-none" />
@@ -140,9 +157,7 @@ function PhotoCard() {
 
         <div className="absolute bottom-4 left-5">
           <p className="text-white font-bold">Govind J S</p>
-          <p className="text-mint-400 text-xs font-mono mt-0.5">
-            CS Undergrad · Developer
-          </p>
+          <p className="text-mint-400 text-xs font-mono mt-0.5">CS Undergrad · Developer</p>
         </div>
       </div>
     </motion.div>
@@ -150,10 +165,10 @@ function PhotoCard() {
 }
 
 /* =========================================================
-   STAT CARD
+   STAT CARD — improved
 ========================================================= */
 
-function StatCard({ icon: Icon, to, suffix = '', label, delay }) {
+function StatCard({ icon: Icon, to, suffix = '', label, delay, accent }) {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -163,17 +178,34 @@ function StatCard({ icon: Icon, to, suffix = '', label, delay }) {
       onViewportEnter={() => setVisible(true)}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -5 }}
-      className="group relative overflow-hidden rounded-2xl p-4 bg-black/[0.025] dark:bg-white/[0.035] border border-black/5 dark:border-white/[0.07] hover:border-mint-500/30 transition-colors"
+      whileHover={{ y: -6, scale: 1.02 }}
+      className="group relative overflow-hidden rounded-2xl p-5 bg-black/[0.025] dark:bg-white/[0.035] border border-black/5 dark:border-white/[0.07] hover:border-mint-500/40 transition-all duration-300 cursor-default"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-mint-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      {/* Animated gradient on hover */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-br from-mint-500/12 via-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400"
+      />
 
-      <div className="relative z-10">
-        <Icon size={17} className="text-mint-500 mb-3 transition-transform duration-300 group-hover:scale-110" />
-        <p className="text-2xl font-black tracking-tight">
-          {visible ? <Counter to={to} suffix={suffix} /> : `0${suffix}`}
-        </p>
-        <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-1">{label}</p>
+      {/* Top mint bar */}
+      <motion.div
+        initial={{ width: 0 }}
+        whileInView={{ width: '40%' }}
+        viewport={{ once: true }}
+        transition={{ delay: delay + 0.3, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute top-0 left-0 h-[2px] bg-gradient-to-r from-mint-500 to-emerald-400 rounded-full"
+      />
+
+      <div className="relative z-10 flex flex-col gap-2">
+        <div className="w-8 h-8 rounded-xl bg-mint-500/10 flex items-center justify-center group-hover:bg-mint-500/20 transition-colors duration-300">
+          <Icon size={15} className="text-mint-500 group-hover:scale-110 transition-transform duration-300" />
+        </div>
+
+        <div>
+          <p className="text-3xl font-black tracking-tight text-gradient">
+            {visible ? <Counter to={to} suffix={suffix} /> : `0${suffix}`}
+          </p>
+          <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5 leading-tight">{label}</p>
+        </div>
       </div>
     </motion.div>
   );
@@ -239,7 +271,6 @@ function InteractiveManifesto() {
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       className="relative mt-20 overflow-hidden max-w-[1500px] mx-auto border-y border-black/10 dark:border-white/10"
     >
-      {/* Mouse following light — desktop only */}
       {hasFinePointer && (
         <motion.div
           style={{ left: smoothX, top: smoothY }}
@@ -247,7 +278,6 @@ function InteractiveManifesto() {
         />
       )}
 
-      {/* Giant background number */}
       <AnimatePresence mode="wait">
         <motion.div
           key={manifesto[active].number}
@@ -261,7 +291,6 @@ function InteractiveManifesto() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Rows */}
       <div className="relative z-10">
         {manifesto.map((item, index) => {
           const isActive = active === index;
@@ -278,29 +307,20 @@ function InteractiveManifesto() {
                 transition={{ type: 'spring', stiffness: 260, damping: 28 }}
                 className="grid md:grid-cols-[70px_1fr_1fr] items-center gap-3 md:gap-6 py-7 md:py-8"
               >
-                {/* Number */}
-                <span
-                  className={`font-mono text-[10px] transition-colors duration-300 ${
-                    isActive ? 'text-mint-500' : 'text-gray-400 dark:text-gray-600'
-                  }`}
-                >
+                <span className={`font-mono text-[10px] transition-colors duration-300 ${isActive ? 'text-mint-500' : 'text-gray-400 dark:text-gray-600'}`}>
                   / {item.number}
                 </span>
 
-                {/* Main word */}
                 <motion.h3
                   animate={{ x: isActive ? 8 : 0 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 28 }}
                   className={`text-[3.4rem] sm:text-6xl md:text-7xl leading-[0.85] font-black tracking-[-0.06em] transition-colors duration-300 ${
-                    isActive
-                      ? 'text-mint-500'
-                      : 'text-gray-200 dark:text-white/[0.10]'
+                    isActive ? 'text-mint-500' : 'text-gray-200 dark:text-white/[0.10]'
                   }`}
                 >
                   {item.word}
                 </motion.h3>
 
-                {/* Description */}
                 <div className="md:pl-6 min-h-[65px] flex items-center">
                   <AnimatePresence mode="wait">
                     {isActive && (
@@ -323,7 +343,6 @@ function InteractiveManifesto() {
                 </div>
               </motion.div>
 
-              {/* Moving green underline */}
               <motion.div
                 initial={false}
                 animate={{ width: isActive ? '100%' : '0%' }}
@@ -335,7 +354,6 @@ function InteractiveManifesto() {
         })}
       </div>
 
-      {/* Footer */}
       <div className="relative z-10 flex justify-between items-center py-4 font-mono text-[9px] sm:text-[10px] tracking-widest text-gray-400 dark:text-gray-600">
         <span>WHAT DRIVES MY WORK</span>
         <motion.span
@@ -343,7 +361,7 @@ function InteractiveManifesto() {
           transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
           className="hidden sm:block"
         >
-  
+          {hasFinePointer ? 'HOVER TO EXPLORE →' : 'TAP TO EXPLORE →'}
         </motion.span>
       </div>
     </motion.div>
@@ -355,26 +373,7 @@ function InteractiveManifesto() {
 ========================================================= */
 
 export default function About() {
-  const [typedText, setTypedText] = useState('');
-
-  const fullText =
-    'CS undergrad @ CEC · passionate about shipping real-world software, training ML models, and leading creative teams. I build things people actually enjoy using.';
-
-  useEffect(() => {
-    let index = 0;
-    setTypedText('');
-
-    const timer = setInterval(() => {
-      if (index < fullText.length) {
-        setTypedText(fullText.slice(0, index + 1));
-        index++;
-      } else {
-        clearInterval(timer);
-      }
-    }, 22);
-
-    return () => clearInterval(timer);
-  }, []);
+  const typedText = useLoopingTypewriter(bioLines, 28, 1800);
 
   return (
     <section id="about" className="relative py-28 px-6 overflow-hidden">
@@ -441,25 +440,70 @@ export default function About() {
               <span className="text-gradient">real products</span>
             </motion.h2>
 
-            {/* Typed bio */}
+            {/* LOOPING TYPEWRITER BIO */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.15 }}
-              className="font-mono text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-8 min-h-[48px]"
+              className="mb-8 rounded-2xl border border-mint-500/15 bg-black/[0.02] dark:bg-white/[0.02] p-4"
             >
-              <span className="text-mint-500/60">{'// '}</span>
-              {typedText}
-              <span className="border-r-2 border-mint-500 ml-0.5 animate-pulse" />
+              {/* Terminal top bar */}
+              <div className="flex items-center gap-1.5 mb-3 pb-3 border-b border-black/5 dark:border-white/5">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-400/60" />
+                <span className="w-2.5 h-2.5 rounded-full bg-yellow-400/60" />
+                <span className="w-2.5 h-2.5 rounded-full bg-mint-500/80" />
+
+              </div>
+
+              {/* Typed text */}
+              <p className="font-mono text-sm text-gray-600 dark:text-gray-300 leading-relaxed min-h-[60px]">
+                <span className="text-mint-500/70 select-none">{'> '}</span>
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={typedText.slice(0, 20)}
+                    className="inline"
+                  >
+                    {typedText}
+                  </motion.span>
+                </AnimatePresence>
+                <motion.span
+                  className="inline-block w-[2px] h-[14px] bg-mint-500 ml-0.5 align-middle"
+                  animate={{ opacity: [1, 0, 1] }}
+                  transition={{ duration: 0.8, repeat: Infinity, ease: 'steps(1)' }}
+                />
+              </p>
             </motion.div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <StatCard icon={Award}  to={9.6}  label="CGPA"               delay={0.05} />
-              <StatCard icon={Code2}  to={2}    suffix="+" label="Major Projects"    delay={0.1}  />
-              <StatCard icon={Layers} to={70}   suffix="+" label="Design Assets Led" delay={0.15} />
-              <StatCard icon={Users}  to={40}   suffix="+" label="Campaigns Directed" delay={0.2} />
+            {/* STATS — full width, no gaps */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
+              <StatCard
+                icon={Award}
+                to={9.6}
+                label="CGPA"
+                delay={0.05}
+              />
+              <StatCard
+                icon={Code2}
+                to={2}
+                suffix="+"
+                label="Major Projects"
+                delay={0.1}
+              />
+              <StatCard
+                icon={Layers}
+                to={70}
+                suffix="+"
+                label="Design Assets"
+                delay={0.15}
+              />
+              <StatCard
+                icon={Users}
+                to={40}
+                suffix="+"
+                label="Campaigns"
+                delay={0.2}
+              />
             </div>
           </div>
         </div>
